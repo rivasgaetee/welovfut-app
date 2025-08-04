@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth';
 import { auth } from '@/constants/firebase';
 import { IAuthService } from './IAuthService';
+import { mapFirebaseErrorToMessage } from './auth/utils';
 
 /**
  * Firebase implementation of the IAuthService interface
@@ -24,8 +25,7 @@ export class FirebaseAuthService implements IAuthService {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       return userCredential.user;
     } catch (error) {
-      const typedError = error as Error;
-      throw new Error(`Authentication failed: ${typedError.message}`);
+      throw new Error(`Authentication failed: ${mapFirebaseErrorToMessage(error)}`);
     }
   }
 
@@ -41,8 +41,7 @@ export class FirebaseAuthService implements IAuthService {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       return userCredential.user;
     } catch (error) {
-      const typedError = error as Error;
-      throw new Error(`Registration failed: ${typedError.message}`);
+      throw new Error(`Registration failed: ${mapFirebaseErrorToMessage(error)}`);
     }
   }
 
@@ -55,8 +54,7 @@ export class FirebaseAuthService implements IAuthService {
     try {
       await signOut(auth);
     } catch (error) {
-      const typedError = error as Error;
-      throw new Error(`Logout failed: ${typedError.message}`);
+      throw new Error(`Logout failed: ${mapFirebaseErrorToMessage(error)}`);
     }
   }
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
 import { router } from 'expo-router';
+import { mapFirebaseErrorToMessage } from '@/services/auth/utils';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -20,20 +21,20 @@ export default function LoginScreen() {
       await login(email, password);
       // No need to navigate - RootNavigator will handle this automatically
     } catch (error) {
-      Alert.alert('Login Failed', error instanceof Error ? error.message : 'An unknown error occurred');
+      Alert.alert('Login Failed', mapFirebaseErrorToMessage(error));
     } finally {
       setIsLoading(false);
     }
   };
 
   const navigateToRegister = () => {
-    router.push('/register');
+    router.push('/(auth)/register');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome Back</Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -42,7 +43,7 @@ export default function LoginScreen() {
         autoCapitalize="none"
         keyboardType="email-address"
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -50,13 +51,13 @@ export default function LoginScreen() {
         onChangeText={setPassword}
         secureTextEntry
       />
-      
+
       <Button
         title={isLoading ? "Logging in..." : "Login"}
         onPress={handleLogin}
         disabled={isLoading}
       />
-      
+
       <View style={styles.registerContainer}>
         <Text>Don't have an account? </Text>
         <Text style={styles.registerLink} onPress={navigateToRegister}>

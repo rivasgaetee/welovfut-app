@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
 import { router } from 'expo-router';
+import { mapFirebaseErrorToMessage } from '@/services/auth/utils';
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState('');
@@ -26,20 +27,20 @@ export default function RegisterScreen() {
       await register(email, password);
       // No need to navigate - RootNavigator will handle this automatically
     } catch (error) {
-      Alert.alert('Registration Failed', error instanceof Error ? error.message : 'An unknown error occurred');
+      Alert.alert('Registration Failed', mapFirebaseErrorToMessage(error));
     } finally {
       setIsLoading(false);
     }
   };
 
   const navigateToLogin = () => {
-    router.push('/login');
+    router.push('/(auth)/login');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -48,7 +49,7 @@ export default function RegisterScreen() {
         autoCapitalize="none"
         keyboardType="email-address"
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -56,7 +57,7 @@ export default function RegisterScreen() {
         onChangeText={setPassword}
         secureTextEntry
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Confirm Password"
@@ -64,13 +65,13 @@ export default function RegisterScreen() {
         onChangeText={setConfirmPassword}
         secureTextEntry
       />
-      
+
       <Button
         title={isLoading ? "Creating Account..." : "Register"}
         onPress={handleRegister}
         disabled={isLoading}
       />
-      
+
       <View style={styles.loginContainer}>
         <Text>Already have an account? </Text>
         <Text style={styles.loginLink} onPress={navigateToLogin}>
