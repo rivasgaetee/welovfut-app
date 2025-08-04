@@ -35,6 +35,38 @@ npm run reset-project
 
 This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
+## Environment Variables
+
+This project uses [react-native-dotenv](https://github.com/goatandsheep/react-native-dotenv) to load environment variables from a `.env` file.
+
+### Setup
+
+1. Create a `.env` file in the root of your project (a sample file is already provided)
+2. Add your environment variables in the format `KEY=VALUE`
+
+Example:
+```
+API_URL=https://api.example.com
+FIREBASE_API_KEY=your_firebase_api_key
+```
+
+### Usage
+
+To use environment variables in your code:
+
+```typescript
+import { API_URL, FIREBASE_API_KEY } from '@env';
+
+console.log(API_URL); // https://api.example.com
+```
+
+### Configuration
+
+The babel.config.js file is already configured to use react-native-dotenv with the following options:
+- `moduleName`: '@env' - This is how you import environment variables
+- `path`: '.env' - The file where environment variables are stored
+- `allowUndefined`: true - Allows undefined variables without throwing errors
+
 ## Learn more
 
 To learn more about developing your project with Expo, look at the following resources:
